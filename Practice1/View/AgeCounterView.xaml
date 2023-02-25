@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="BirthdayCalculator.View.AgeCounterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Enter your birthday:" Margin="5"/>
+        <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding Birthday}" Margin="5"/>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Calculate Age and Zodiac Signs" Margin="5" Command="{Binding CalculateCommand}"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Your age is:" Margin="5"/>
+        <TextBlock Grid.Row="2" Grid.Column="1"  Text="{Binding Age}" Margin="5"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="Your Zodiac Sign (Western):" Margin="5"/>
+        <TextBlock Grid.Row="3" Grid.Column="1"  Text="{Binding WesternZodiacSign}" Margin="5"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="Your Zodiac Sign (Chinese):" Margin="5"/>
+        <TextBlock Grid.Row="4" Grid.Column="1"  Text="{Binding ChineseZodiacSign}" Margin="5"/>
+    </Grid>
+</UserControl>
