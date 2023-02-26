@@ -75,13 +75,18 @@ namespace BirthdayCalculator.ViewModel
         }
 
         private void Calculate(object parameter)
+
         {
+         
             Age = CalculateAge(Birthday);
 
             if (Age < 0 || Age > 135)
             {
+                Age=0;
+                MessageBox.Show("Enter valid Date!");
                 return;
             }
+
 
             if (IsBirthdayToday(Birthday))
             {
