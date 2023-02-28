@@ -15,8 +15,8 @@ namespace BirthdayCalculator.ViewModel
     {
 
        
-        private DateTime _birthday = DateTime.Now;
-        private int _age;
+        private DateTime _birthday = DateTime.Today;
+        private int _age=0;
         private string _westernZodiacSign;
         private string _chineseZodiacSign;
 
