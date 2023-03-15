@@ -13,19 +13,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Enter your birthday:" Margin="5"/>
-        <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding Birthday}" Margin="5"/>
-        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Calculate Age and Zodiac Signs" Margin="5" Command="{Binding CalculateCommand}"/>
-        <Label Grid.Row="2" Grid.Column="0" Content="Your age is:" Margin="5"/>
-        <TextBlock Grid.Row="2" Grid.Column="1"  Text="{Binding Age}" Margin="5"/>
-        <Label Grid.Row="3" Grid.Column="0" Content="Your Zodiac Sign (Western):" Margin="5"/>
-        <TextBlock Grid.Row="3" Grid.Column="1"  Text="{Binding WesternZodiacSign}" Margin="5"/>
-        <Label Grid.Row="4" Grid.Column="0" Content="Your Zodiac Sign (Chinese):" Margin="5"/>
-        <TextBlock Grid.Row="4" Grid.Column="1"  Text="{Binding ChineseZodiacSign}" Margin="5"/>
+        
+        <Label Grid.Row="0" Grid.Column="0" Content="First Name:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Label Grid.Row="1" Grid.Column="0" Content="Last Name:"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Label Grid.Row="2" Grid.Column="0" Content="Email Address:"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Label Grid.Row="3" Grid.Column="0" Content="Date of Birth:"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Button Grid.Row="4" Grid.Column="1" Content="Proceed" Command="{Binding ProceedCommand}"/>
+        
+        <Label Grid.Row="5" Grid.Column="1" Content="{Binding StatusMessage}"/>
+    
     </Grid>
 </UserControl>

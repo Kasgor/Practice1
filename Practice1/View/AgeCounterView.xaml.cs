@@ -21,11 +21,11 @@ namespace BirthdayCalculator.View
     /// </summary>
     public partial class AgeCounterView : UserControl
     {
-        private AgeCounterViewModel _viewModel;
+        private PersonViewModel _viewModel;
         public AgeCounterView()
         {
             InitializeComponent();
-            DataContext = _viewModel = new AgeCounterViewModel();
+            DataContext = _viewModel = new PersonViewModel();
         }
        
 }

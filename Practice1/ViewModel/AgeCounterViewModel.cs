@@ -80,10 +80,16 @@ namespace BirthdayCalculator.ViewModel
          
             Age = CalculateAge(Birthday);
 
-            if (Age < 0 || Age > 135)
+            if (Age < 0)
             {
                 Age=0;
-                MessageBox.Show("Enter valid Date!");
+                MessageBox.Show("You can`t be born in the future!");
+                return;
+            } 
+            if ( Age > 135)
+            {
+                Age=0;
+                MessageBox.Show("You are too old!");
                 return;
             }
 
