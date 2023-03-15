@@ -21,16 +21,16 @@
         </Grid.ColumnDefinitions>
         
         <Label Grid.Row="0" Grid.Column="0" Content="First Name:"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         
         <Label Grid.Row="1" Grid.Column="0" Content="Last Name:"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         
         <Label Grid.Row="2" Grid.Column="0" Content="Email Address:"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         
         <Label Grid.Row="3" Grid.Column="0" Content="Date of Birth:"/>
-        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged}"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
         <Button Grid.Row="4" Grid.Column="1" Content="Proceed" Command="{Binding ProceedCommand}"/>
         
