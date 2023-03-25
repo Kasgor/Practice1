@@ -1,4 +1,5 @@
-﻿using BirthdayCalculator.Model;
+﻿
+using BirthdayCalculator.Model;
 using BirthdayCalculator.Tools;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,13 @@ namespace BirthdayCalculator.ViewModel
         public string LastName { get; set; }
         public string Email { get; set; }
         public DateTime Birthday { get; set; }
+        public bool _enabled=true;
+
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set { _enabled = value; }
+        }
         public Person Person
         {
             get { return _person; }
@@ -82,16 +90,50 @@ namespace BirthdayCalculator.ViewModel
 
           
         }
-       async private Task<Task> CreateInfo(Person person)
+       async private Task CreateInfo(Person person)
 
         {
-            await Task.Run(() => person.CheckAge());
-            if (person.DateOfBirth != DateTime.MinValue)
+            bool EmailCorrect=true;
+            try
+            {
+             Enabled = false;
+                OnPropertyChanged(nameof(Enabled));
+                await Task.Run(() => person.Calculate());
+            }
+            catch(FutureBirthDateException e)
+            {
+                MessageBox.Show("Person haven`t been born yet!");
+            }
+            catch(TooOldException e)
+            {
+                MessageBox.Show("Persos`s age is over 135, it is possible not true.");
+            }
+            catch (InvalidEmailException e)
+            {
+                MessageBox.Show("Email is incorrect!");
+                EmailCorrect=false;
+            }
+            finally
+            {
+                Enabled = true;
+                OnPropertyChanged(nameof(Enabled));
+            }
+          
+            if (person.DateOfBirth != DateTime.MinValue&&EmailCorrect)
                 StatusMessage = person.GetPersonInfo();
             else
                 StatusMessage = "";
-            return Task.CompletedTask;
         }
+
+
     }
+
+ 
+
+
+    
+
+   
+
 
 }

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using BirthdayCalculator.Tools;
+using BirthdayCalculator.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -14,6 +17,7 @@ namespace BirthdayCalculator.Model
         private string _lastName;
         private string _email;
         private DateTime _dateOfBirth;
+        private int _age;
         public Person(string firstName, string lastName, string emailAddress, DateTime dateOfBirth)
         {
             FirstName = firstName;
@@ -22,15 +26,10 @@ namespace BirthdayCalculator.Model
             DateOfBirth = dateOfBirth;
         }
 
-        public Person(string firstName, string lastName, DateTime dateOfBirth)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            DateOfBirth = dateOfBirth;
-        }
 
 
-      
+
+
         public string FirstName
         {
             get { return _firstName; }
@@ -74,123 +73,178 @@ namespace BirthdayCalculator.Model
             }
         }
 
-        public bool IsAdult
+       
+
+        public int Age
         {
-            get { return (DateTime.Today.Year - DateOfBirth.Year) >= 18; }
+            get { return _age; }
+            set { _age = value; }
         }
 
+        private bool _isAdult;
+
+        public bool IsAdult
+        {
+            get { return _isAdult; }
+        }
+        private bool CalculateAdult()
+        {
+            return (DateTime.Today.Year - DateOfBirth.Year) >= 18;
+        }
+
+        private string _westernSign;
         public string WesternSign
         {
             get
             {
-
-                int month = DateOfBirth.Month;
-                int day = DateOfBirth.Day;
-
-                if ((month == 3 && day >= 21) || (month == 4 && day <= 19))
-                {
-                    return "Aries";
-                }
-                else if ((month == 4 && day >= 20) || (month == 5 && day <= 20))
-                {
-                    return "Taurus";
-                }
-                else if ((month == 5 && day >= 21) || (month == 6 && day <= 20))
-                {
-                    return "Gemini";
-                }
-                else if ((month == 6 && day >= 21) || (month == 7 && day <= 22))
-                {
-                    return "Cancer";
-                }
-                else if ((month == 7 && day >= 23) || (month == 8 && day <= 22))
-                {
-                    return "Leo";
-                }
-                else if ((month == 8 && day >= 23) || (month == 9 && day <= 22))
-                {
-                    return "Virgo";
-                }
-                else if ((month == 9 && day >= 23) || (month == 10 && day <= 22))
-                {
-                    return "Libra";
-                }
-                else if ((month == 10 && day >= 23) || (month == 11 && day <= 21))
-                {
-                    return "Scorpio";
-                }
-                else if ((month == 11 && day >= 22) || (month == 12 && day <= 21))
-                {
-                    return "Sagittarius";
-                }
-                else if ((month == 12 && day >= 22) || (month == 1 && day <= 19))
-                {
-                    return "Capricorn";
-                }
-                else if ((month == 1 && day >= 20) || (month == 2 && day <= 18))
-                {
-                    return "Aquarius";
-                }
-                else
-                {
-                    return "Pisces";
-                }
+               return _westernSign;
+                
 
             }
         }
-
+        private string _chineseSign;
         public string ChineseSign
         {
             get
             {
-                int year = DateOfBirth.Year;
-                if (year % 12 == 0) { return "Monkey"; }
-              
-                else if (year % 12 == 1) { return "Rooster"; }
-                else if (year % 12 == 2) { return "Dog"; }
-                else if (year % 12 == 3) { return "Pig"; }
-                else if (year % 12 == 4) { return "Rat"; }
-                else if (year % 12 == 5) { return "Ox"; }
-                else if (year % 12 == 6) { return "Tiger"; }
-                else if (year % 12 == 7) { return "Rabbit"; }
-                else if (year % 12 == 8) { return "Dragon"; }
-                else if (year % 12 == 9) { return "Snake"; }
-                else if (year % 12 == 10) { return "Horse"; }
-                else { return "Sheep"; }
+                return _chineseSign;
+               
             }
         
         }
-         public void CheckAge()
+         public void Calculate()
         {
+            Thread.Sleep(1000);
             DateTime today = DateTime.Today;
-            int age = today.Year - DateOfBirth.Year;
-
-            if (DateOfBirth > today.AddYears(-age))
+             Age = today.Year - DateOfBirth.Year;
+            
+            if (DateOfBirth > today.AddYears(-_age))
             {
-                age--;
+                _age--;
             }
             if (DateOfBirth > DateTime.Today)
             {
-                MessageBox.Show("Person haven`t been born yet!");
-                DateOfBirth = DateTime.MinValue;
                
+                DateOfBirth = DateTime.MinValue;
+                throw new FutureBirthDateException("Person haven`t been born yet!");
+
+
             }
-            else if (age > 135)
+            else if (_age > 135)
             {
 
-                MessageBox.Show("Persos`s age is over 135, it is possible not true.");
+                
                 DateOfBirth = DateTime.MinValue;
+                throw new TooOldException("Persos`s age is over 135, it is possible not true.");
 
             }
-            else if (DateOfBirth.Month == DateTime.Today.Month && DateOfBirth.Day == DateTime.Today.Day)
+            else if (DateOfBirth.Month == DateTime.Today.Month && DateOfBirth.Day == DateTime.Today.Day&&IsValidEmail(Email))
             {
                 MessageBox.Show("Happy birthday");
             }
-           
+            if (!IsValidEmail(Email))
+            {
+                throw new InvalidEmailException("Email is incorrect!");
+            }
+            _chineseSign= CalculateChinese();
+            _westernSign= CalculateWestern();
+            _isAdult=CalculateAdult();
+            _isBirthday = CalculateBirthday();
         }
+
+        public string CalculateChinese()
+        {
+            int year = DateOfBirth.Year;
+            if (year % 12 == 0) { return "Monkey"; }
+
+            else if (year % 12 == 1) { return "Rooster"; }
+            else if (year % 12 == 2) { return "Dog"; }
+            else if (year % 12 == 3) { return "Pig"; }
+            else if (year % 12 == 4) { return "Rat"; }
+            else if (year % 12 == 5) { return "Ox"; }
+            else if (year % 12 == 6) { return "Tiger"; }
+            else if (year % 12 == 7) { return "Rabbit"; }
+            else if (year % 12 == 8) { return "Dragon"; }
+            else if (year % 12 == 9) { return "Snake"; }
+            else if (year % 12 == 10) { return "Horse"; }
+            else { return "Sheep"; }
+        }
+
+        public string CalculateWestern()
+        {
+            int month = DateOfBirth.Month;
+            int day = DateOfBirth.Day;
+
+            if ((month == 3 && day >= 21) || (month == 4 && day <= 19))
+            {
+                return "Aries";
+            }
+            else if ((month == 4 && day >= 20) || (month == 5 && day <= 20))
+            {
+                return "Taurus";
+            }
+            else if ((month == 5 && day >= 21) || (month == 6 && day <= 20))
+            {
+                return "Gemini";
+            }
+            else if ((month == 6 && day >= 21) || (month == 7 && day <= 22))
+            {
+                return "Cancer";
+            }
+            else if ((month == 7 && day >= 23) || (month == 8 && day <= 22))
+            {
+                return "Leo";
+            }
+            else if ((month == 8 && day >= 23) || (month == 9 && day <= 22))
+            {
+                return "Virgo";
+            }
+            else if ((month == 9 && day >= 23) || (month == 10 && day <= 22))
+            {
+                return "Libra";
+            }
+            else if ((month == 10 && day >= 23) || (month == 11 && day <= 21))
+            {
+                return "Scorpio";
+            }
+            else if ((month == 11 && day >= 22) || (month == 12 && day <= 21))
+            {
+                return "Sagittarius";
+            }
+            else if ((month == 12 && day >= 22) || (month == 1 && day <= 19))
+            {
+                return "Capricorn";
+            }
+            else if ((month == 1 && day >= 20) || (month == 2 && day <= 18))
+            {
+                return "Aquarius";
+            }
+            else
+            {
+                return "Pisces";
+            }
+        }
+
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var address = new System.Net.Mail.MailAddress(email);
+                return address.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private bool _isBirthday;
         public bool IsBirthday
         {
-            get { return DateOfBirth.Month == DateTime.Today.Month && DateOfBirth.Day == DateTime.Today.Day; }
+            get { return _isBirthday; }
+        }
+        private bool CalculateBirthday()
+        {
+            return DateOfBirth.Month == DateTime.Today.Month && DateOfBirth.Day == DateTime.Today.Day;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -206,7 +260,7 @@ namespace BirthdayCalculator.Model
             sb.AppendLine($"Surname: {LastName}");
             sb.AppendLine($"Email: {Email}");
             sb.AppendLine($"Day of birth: {DateOfBirth:d MMMM yyyy}");
-            sb.AppendLine($"Age: {DateTime.Today.Year - DateOfBirth.Year}");
+            sb.AppendLine($"Age: {Age}");
             sb.AppendLine($"Western sing: {WesternSign}");
             sb.AppendLine($"Chinese Zodiac: {ChineseSign}");
             sb.AppendLine($"Adult: {IsAdult}");

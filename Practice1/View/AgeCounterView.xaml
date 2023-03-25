@@ -32,7 +32,7 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Date of Birth:"/>
         <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-        <Button Grid.Row="4" Grid.Column="1" Content="Proceed" Command="{Binding ProceedCommand}"/>
+        <Button Grid.Row="4" Grid.Column="1" Content="Proceed" Command="{Binding ProceedCommand}" IsEnabled="{Binding Enabled}"/>
         
         <Label Grid.Row="5" Grid.Column="1" Content="{Binding StatusMessage}"/>
     
