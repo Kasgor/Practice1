@@ -27,6 +27,7 @@ namespace BirthdayCalculator.View
             InitializeComponent();
             DataContext = _viewModel = new PersonViewModel();
         }
+
        
 }
 }

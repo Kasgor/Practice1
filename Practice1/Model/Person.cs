@@ -18,6 +18,10 @@ namespace BirthdayCalculator.Model
         private string _email;
         private DateTime _dateOfBirth;
         private int _age;
+        public Person()
+        {
+            
+        }
         public Person(string firstName, string lastName, string emailAddress, DateTime dateOfBirth)
         {
             FirstName = firstName;
@@ -86,6 +90,7 @@ namespace BirthdayCalculator.Model
         public bool IsAdult
         {
             get { return _isAdult; }
+            set { _isAdult=value; }
         }
         private bool CalculateAdult()
         {
@@ -101,6 +106,7 @@ namespace BirthdayCalculator.Model
                 
 
             }
+            set { _westernSign = value; }
         }
         private string _chineseSign;
         public string ChineseSign
@@ -109,6 +115,10 @@ namespace BirthdayCalculator.Model
             {
                 return _chineseSign;
                
+            }
+            set
+            {
+                _chineseSign = value;
             }
         
         }
@@ -224,6 +234,7 @@ namespace BirthdayCalculator.Model
                 return "Pisces";
             }
         }
+
 
         public bool IsValidEmail(string email)
         {
