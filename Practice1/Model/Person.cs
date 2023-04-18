@@ -18,10 +18,10 @@ namespace BirthdayCalculator.Model
         private string _email;
         private DateTime _dateOfBirth;
         private int _age;
-        public Person()
-        {
-            
-        }
+        private bool _isAdult;
+        private string _westernSign;
+        private string _chineseSign;
+        public Person(){}
         public Person(string firstName, string lastName, string emailAddress, DateTime dateOfBirth)
         {
             FirstName = firstName;
@@ -29,11 +29,6 @@ namespace BirthdayCalculator.Model
             Email = emailAddress;
             DateOfBirth = dateOfBirth;
         }
-
-
-
-
-
         public string FirstName
         {
             get { return _firstName; }
@@ -43,8 +38,6 @@ namespace BirthdayCalculator.Model
                 OnPropertyChanged(nameof(FirstName));
             }
         }
-
-     
         public string LastName
         {
             get { return _lastName; }
@@ -54,8 +47,6 @@ namespace BirthdayCalculator.Model
                 OnPropertyChanged(nameof(LastName));
             }
         }
-
-    
         public string Email
         {
             get { return _email; }
@@ -65,8 +56,6 @@ namespace BirthdayCalculator.Model
                 OnPropertyChanged(nameof(Email));
             }
         }
-
-  
         public DateTime DateOfBirth
         {
             get { return _dateOfBirth; }
@@ -76,55 +65,37 @@ namespace BirthdayCalculator.Model
                 OnPropertyChanged(nameof(DateOfBirth));
             }
         }
-
-       
-
         public int Age
         {
             get { return _age; }
             set { _age = value; }
         }
-
-        private bool _isAdult;
-
         public bool IsAdult
         {
             get { return _isAdult; }
             set { _isAdult=value; }
         }
-        private bool CalculateAdult()
-        {
-            return (DateTime.Today.Year - DateOfBirth.Year) >= 18;
-        }
-
-        private string _westernSign;
         public string WesternSign
         {
             get
             {
                return _westernSign;
-                
-
             }
             set { _westernSign = value; }
         }
-        private string _chineseSign;
         public string ChineseSign
         {
             get
             {
                 return _chineseSign;
-               
             }
             set
             {
                 _chineseSign = value;
             }
-        
         }
          public void Calculate()
         {
-            Thread.Sleep(1000);
             DateTime today = DateTime.Today;
              Age = today.Year - DateOfBirth.Year;
             
@@ -134,16 +105,11 @@ namespace BirthdayCalculator.Model
             }
             if (DateOfBirth > DateTime.Today)
             {
-               
                 DateOfBirth = DateTime.MinValue;
                 throw new FutureBirthDateException("Person haven`t been born yet!");
-
-
             }
             else if (_age > 135)
             {
-
-                
                 DateOfBirth = DateTime.MinValue;
                 throw new TooOldException("Persos`s age is over 135, it is possible not true.");
 
@@ -159,7 +125,10 @@ namespace BirthdayCalculator.Model
             _chineseSign= CalculateChinese();
             _westernSign= CalculateWestern();
             _isAdult=CalculateAdult();
-            _isBirthday = CalculateBirthday();
+        }
+        private bool CalculateAdult()
+        {
+            return (DateTime.Today.Year - DateOfBirth.Year) >= 18;
         }
 
         public string CalculateChinese()
@@ -234,8 +203,6 @@ namespace BirthdayCalculator.Model
                 return "Pisces";
             }
         }
-
-
         public bool IsValidEmail(string email)
         {
             try
@@ -248,16 +215,6 @@ namespace BirthdayCalculator.Model
                 return false;
             }
         }
-        private bool _isBirthday;
-        public bool IsBirthday
-        {
-            get { return _isBirthday; }
-        }
-        private bool CalculateBirthday()
-        {
-            return DateOfBirth.Month == DateTime.Today.Month && DateOfBirth.Day == DateTime.Today.Day;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

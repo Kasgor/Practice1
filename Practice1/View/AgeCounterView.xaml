@@ -22,16 +22,16 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="First Name:"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name,  UpdateSourceTrigger=PropertyChanged, Mode=Default}"/>
 
         <Label Grid.Row="1" Grid.Column="0" Content="Last Name:"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, Mode=Default}"/>
 
         <Label Grid.Row="2" Grid.Column="0" Content="Email Address:"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, Mode=Default}"/>
 
         <Label Grid.Row="3" Grid.Column="0" Content="Date of Birth:"/>
-        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, Mode=Default}"/>
 
         <Label Grid.Row="4" Grid.Column="0" Content="Search:" Margin="0,0,5,0"/>
         <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"/>
@@ -48,16 +48,12 @@
                 <DataGridTextColumn Header="Chinese sign" Binding="{Binding ChineseSign}"/>
             </DataGrid.Columns>
         </DataGrid>
-
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Refresh" Margin="0,0,5,0" Command="{Binding RefreshCommand}" IsEnabled="{Binding Enabled}"/>
             <Button Content="Filter" Margin="0,0,5,0" Command="{Binding FilterCommand}" IsEnabled="{Binding Enabled}"/>
-
             <Button Content="Add" Margin="0,0,5,0" Command="{Binding AddUserCommand}" IsEnabled="{Binding Enabled}"/>
-
             <Button Content="Edit" Margin="0,0,5,0" Command="{Binding EditUserCommand}" CommandParameter="{Binding SelectedUser}" IsEnabled="{Binding Enabled}" />
             <Button Content="Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding SelectedUser}" IsEnabled="{Binding Enabled}" />
         </StackPanel>
-
     </Grid>
 </UserControl>

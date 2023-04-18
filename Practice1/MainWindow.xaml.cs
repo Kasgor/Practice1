@@ -9,10 +9,6 @@ namespace BirthdayCalculator
         public MainWindow()
         {
             InitializeComponent();
-
-            
         }
-
-
     }
 }

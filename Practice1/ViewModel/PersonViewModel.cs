@@ -17,36 +17,21 @@ namespace BirthdayCalculator.ViewModel
 {
     public class PersonViewModel : INotifyPropertyChanged
     {
-        private Person _person;
+        ServiceCollection usersControl = new ServiceCollection();
         private bool valid = false;
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public DateTime Birthday { get; set; }
+        private Person _selectedUser = new Person();
         public bool _enabled=true;
-
-        public string SearchTerm { get; set; }
         public bool Enabled
         {
             get { return _enabled; }
             set { _enabled = value; }
         }
-        public Person Person
-        {
-            get { return _person; }
-            set
-            {
-                _person = value;
-                OnPropertyChanged(nameof(Person));
-            }
-        }
-
-
-
-
-        private  ObservableCollection<Person> _users;
-        private Person _selectedUser;
-
+        public string SearchTerm { get; set; }
+        private ObservableCollection<Person> _users;
         public ObservableCollection<Person> Users
         {
             get { return _users; }
@@ -56,24 +41,27 @@ namespace BirthdayCalculator.ViewModel
                 OnPropertyChanged(nameof(Users));
             }
         }
-
         public Person SelectedUser
         {
             get { return _selectedUser; }
             set
             {
                 _selectedUser = value;
+                if (_selectedUser != null)
+                {
+                    Name = value.FirstName;
+                    LastName = value.LastName;
+                    Email = value.Email;
+                    Birthday = value.DateOfBirth;
+                    OnPropertyChanged(nameof(Name));
+                    OnPropertyChanged(nameof(LastName));
+                    OnPropertyChanged(nameof(Email));
+                    OnPropertyChanged(nameof(Birthday));
+                }
                 OnPropertyChanged(nameof(SelectedUser));
             }
         }
 
-        public RelayCommand<object> AddUserCommand { get; set; }
-        public RelayCommand<object> EditUserCommand { get; set; }
-        public RelayCommand<object> DeleteUserCommand { get; set; }
-        public RelayCommand<object> SortCommandA { get; set; }
-        public RelayCommand<object> SortCommandD { get; set; }
-        public RelayCommand<object> FilterCommand { get; set; }
-        public RelayCommand<object> RefreshCommand { get; set; }
         public PersonViewModel()
         {
             ProceedCommand = new RelayCommand<object>(ProceedCommandExecute, CanProceed);
@@ -83,29 +71,57 @@ namespace BirthdayCalculator.ViewModel
             FilterCommand = new RelayCommand<object>(Filter);
             RefreshCommand = new RelayCommand<object>(Refresh);
 
-            Birthday = DateTime.Today;
-            Person = new Person(Name, LastName, Email, Birthday);
-            try
-            {
-                Users = LoadUsers();
-            }
-            catch (Exception)
-            {
-                Users = GenerateUsers();
-                SaveUsers();
-            }
-
-
+            Users = usersControl.Persons;
         }
+        public RelayCommand<object> AddUserCommand { get; set; }
+        public RelayCommand<object> EditUserCommand { get; set; }
+        public RelayCommand<object> DeleteUserCommand { get; set; }
+        public RelayCommand<object> FilterCommand { get; set; }
+        public RelayCommand<object> RefreshCommand { get; set; }
+        private async void AddUser(object parameter)
+        {
+            var person = new Person(Name, LastName, Email, Birthday);
 
+            await CreateInfo(person);
+            if (valid)
+            {
+                usersControl.Persons.Add(person);
+                usersControl.SaveUsers();
+                Refresh();
+            }
+        }
+        private async void EditUser(object parameter)
+        {
+            var person = new Person(Name, LastName, Email, Birthday);
+            await CreateInfo(person);
+            if (valid)
+            {
+                var item = usersControl.Persons.FirstOrDefault(i => i.Equals(SelectedUser));
+                if (item != null)
+                {
+                    usersControl.Edit(person, usersControl.Persons.IndexOf(item));
+                }
+            }
+            usersControl.SaveUsers();
+            Refresh();
+        }
+        private void DeleteUser(object parameter)
+        {
+            usersControl.Persons.Remove(SelectedUser);
+            usersControl.SaveUsers();
+            Refresh();
+        }
         public void Refresh(object parameter)
         {
-            Users = LoadUsers();
+            Users = usersControl.Persons;
         }
-
-
+        public void Refresh()
+        {
+            Users = usersControl.Persons;
+        }
         public void Filter(object parameter)
         {
+            Users=usersControl.Persons;
             if (string.IsNullOrWhiteSpace(SearchTerm))
             {
                 Users = new ObservableCollection<Person>(_users);
@@ -127,56 +143,7 @@ namespace BirthdayCalculator.ViewModel
             }
 
         }
-        public void Sort(string propertyName, ListSortDirection sortDirection)
-        {
-        
-        }
-
-        private async void AddUser(object parameter)
-        {
-            var person = new Person(Name, LastName, Email, Birthday);
-
-
-
-            await CreateInfo(person);
-            if (valid)
-            {
-                Users.Add(person);
-                SaveUsers();
-            }
-           
-
-        }
-
-        private async void EditUser(object parameter)
-        {
-            var person = new Person(Name, LastName, Email, Birthday);
-
-
-
-            await CreateInfo(person);
-            if (valid)
-            {
-                Users[Users.IndexOf(SelectedUser)]=person;
-            }
-            SaveUsers();
-        }
-
-        private void DeleteUser(object parameter)
-        {
-           Users.Remove(SelectedUser);
-            SaveUsers();
-        }
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         public ICommand ProceedCommand { get; private set; }
-
         private bool CanProceed(object parameter)
         {
             if (!string.IsNullOrEmpty(Name) &&
@@ -214,50 +181,8 @@ namespace BirthdayCalculator.ViewModel
 
         private async void ProceedCommandExecute(object parameter)
         {
-            var person = new Person(Name, LastName, Email, Birthday);
-
-            
-            
+            var person = new Person(Name, LastName, Email, Birthday);  
               await CreateInfo(person);
-            
-
-          
-        }
-        public ObservableCollection<Person> GenerateUsers()
-        {
-            ObservableCollection<Person> users = new ObservableCollection<Person>();
-            Random rnd = new Random();
-
-            for (int i = 0; i < 50; i++)
-            {
-                string firstName = "First" + i.ToString();
-                string lastName = "Last" + i.ToString();
-                string email = "email" + i.ToString() + "@example.com";
-                DateTime dateOfBirth = new DateTime(rnd.Next(1950, 2005), rnd.Next(1, 13), rnd.Next(1, 29));
-
-                Person user = new Person(firstName, lastName, email, dateOfBirth);
-                user.Calculate();
-
-                users.Add(user);
-            }
-
-            return users;
-        }
-        public void SaveUsers()
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<Person>));
-            using (FileStream stream = new FileStream("users1.xml", FileMode.Create))
-            {
-                serializer.Serialize(stream, Users);
-            }
-        }
-        public ObservableCollection<Person> LoadUsers()
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<Person>));
-            using (FileStream stream = new FileStream("users1.xml", FileMode.Open))
-            {
-                return (ObservableCollection<Person>)serializer.Deserialize(stream);
-            }
         }
         async private Task CreateInfo(Person person)
 
@@ -298,6 +223,11 @@ namespace BirthdayCalculator.ViewModel
                 StatusMessage = "";
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 
