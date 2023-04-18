@@ -13,14 +13,7 @@ namespace BirthdayCalculator.Model
 {
     public class Person : INotifyPropertyChanged
     {
-        private string _firstName;
-        private string _lastName;
-        private string _email;
-        private DateTime _dateOfBirth;
-        private int _age;
-        private bool _isAdult;
-        private string _westernSign;
-        private string _chineseSign;
+
         public Person(){}
         public Person(string firstName, string lastName, string emailAddress, DateTime dateOfBirth)
         {
@@ -29,6 +22,14 @@ namespace BirthdayCalculator.Model
             Email = emailAddress;
             DateOfBirth = dateOfBirth;
         }
+        private string _firstName;
+        private string _lastName;
+        private string _email;
+        private DateTime _dateOfBirth;
+        private int _age;
+        private bool _isAdult;
+        private string _westernSign;
+        private string _chineseSign;
         public string FirstName
         {
             get { return _firstName; }
@@ -130,7 +131,6 @@ namespace BirthdayCalculator.Model
         {
             return (DateTime.Today.Year - DateOfBirth.Year) >= 18;
         }
-
         public string CalculateChinese()
         {
             int year = DateOfBirth.Year;
@@ -148,7 +148,6 @@ namespace BirthdayCalculator.Model
             else if (year % 12 == 10) { return "Horse"; }
             else { return "Sheep"; }
         }
-
         public string CalculateWestern()
         {
             int month = DateOfBirth.Month;
@@ -216,10 +215,6 @@ namespace BirthdayCalculator.Model
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         public string GetPersonInfo()
         {
             var sb = new StringBuilder();
@@ -234,6 +229,10 @@ namespace BirthdayCalculator.Model
             sb.AppendLine($"Adult: {IsAdult}");
 
             return sb.ToString();
+        }
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

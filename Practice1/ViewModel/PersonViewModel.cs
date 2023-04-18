@@ -168,17 +168,6 @@ namespace BirthdayCalculator.ViewModel
             return true;
             return false;
         }
-
-        private string statusMessage;
-
-        public string StatusMessage
-        {
-            get { return statusMessage; }
-            set { statusMessage = value;
-                OnPropertyChanged(nameof(StatusMessage));
-            }
-        }
-
         private async void ProceedCommandExecute(object parameter)
         {
             var person = new Person(Name, LastName, Email, Birthday);  
@@ -216,13 +205,7 @@ namespace BirthdayCalculator.ViewModel
                 Enabled = true;
                 OnPropertyChanged(nameof(Enabled));
             }
-          
-            if (person.DateOfBirth != DateTime.MinValue&&EmailCorrect)
-                StatusMessage = person.GetPersonInfo();
-            else
-                StatusMessage = "";
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -230,13 +213,4 @@ namespace BirthdayCalculator.ViewModel
         }
 
     }
-
- 
-
-
-    
-
-   
-
-
 }

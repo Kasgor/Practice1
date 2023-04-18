@@ -38,8 +38,6 @@ namespace BirthdayCalculator.Tools
         {
             persons[index] = p;
         }
-
-
         public ObservableCollection<Person> GenerateUsers()
         {
             ObservableCollection<Person> users = new ObservableCollection<Person>();
